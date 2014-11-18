@@ -194,6 +194,7 @@ var tarballSources = []tarballSource{
 	{"https://code.google.com/p/go/downloads/list?can=1&q=linux", "//a/@href[contains(., 'go.googlecode.com')]"},
 	{"http://golang.org/dl/", "//a/@href[contains(., 'storage.googleapis.com/golang/')]"},
 	{"http://dave.cheney.net/unofficial-arm-tarballs", "//a/@href[contains(., 'dave.cheney.net/paste')]"},
+	//{"https://code.google.com/p/go/downloads/list?can=1&q=linux", "//a/@href[contains(., 'go.googlecode.com')]"},
 	{"http://www.golangtc.com/download", "//a/@href[contains(., '/static/go/')]"},
 }
 

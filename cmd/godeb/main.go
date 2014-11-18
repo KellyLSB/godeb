@@ -13,7 +13,6 @@ import (
 	"bytes"
 	"fmt"
 	"go/build"
-	"gopkg.in/xmlpath.v1"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -21,6 +20,8 @@ import (
 	"path"
 	"sort"
 	"strings"
+
+	"gopkg.in/xmlpath.v1"
 )
 
 var usage = `Usage: godeb <command> [<options> ...]
@@ -193,6 +194,7 @@ var tarballSources = []tarballSource{
 	{"https://code.google.com/p/go/downloads/list?can=1&q=linux", "//a/@href[contains(., 'go.googlecode.com')]"},
 	{"http://golang.org/dl/", "//a/@href[contains(., 'storage.googleapis.com/golang/')]"},
 	{"http://dave.cheney.net/unofficial-arm-tarballs", "//a/@href[contains(., 'dave.cheney.net/paste')]"},
+	{"http://www.golangtc.com/download", "//a/@href[contains(., '/static/go/')]"},
 }
 
 func tarballs() ([]*Tarball, error) {
@@ -247,6 +249,7 @@ func tarballsFrom(source tarballSource) ([]*Tarball, error) {
 	}
 	var tbs []*Tarball
 	iter := xmlpath.MustCompile(source.xpath).Iter(root)
+
 	for iter.Next() {
 		s := iter.Node().String()
 		if strings.HasPrefix(s, "//") {
@@ -254,6 +257,9 @@ func tarballsFrom(source tarballSource) ([]*Tarball, error) {
 		}
 		if strings.HasPrefix(s, "/dl/") {
 			s = source.url + s[4:]
+		}
+		if strings.HasPrefix(s, "/static") {
+			s = "http://www.golangtc.com" + s
 		}
 		if tb, ok := parseURL(s); ok {
 			tbs = append(tbs, tb)
